@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:project_app/models/admin_model.dart';
 import 'package:provider/provider.dart';
 import '../models/user_model.dart';
+import '../providers/admin_provider.dart';
 import '../providers/auth_provider.dart';
 import 'package:email_validator/email_validator.dart';
 
@@ -19,11 +21,18 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
-    TextEditingController firstnameController = TextEditingController();
-    TextEditingController lastnameController = TextEditingController();
+    // TextEditingController firstnameController = TextEditingController();
+    // TextEditingController lastnameController = TextEditingController();
+
+    TextEditingController nameController = TextEditingController();
+    TextEditingController empNoController = TextEditingController();
+    TextEditingController positionController = TextEditingController();
+    TextEditingController homeUnitController = TextEditingController();
+
     final formKey = GlobalKey<FormState>();
-    final firstname = TextFormField(
-      controller: firstnameController,
+
+    final name = TextFormField(
+      controller: nameController,
       decoration: const InputDecoration(
         hintText: "First Name",
       ),
@@ -34,14 +43,38 @@ class _SignupPageState extends State<SignupPage> {
       },
     );
 
-    final lastname = TextFormField(
-      controller: lastnameController,
+    final empNumber = TextFormField(
+      controller: empNoController,
       decoration: const InputDecoration(
-        hintText: "Last Name",
+        hintText: "Employee Number",
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter your lastname.';
+          return 'Please enter your employee number.';
+        }
+      },
+    );
+
+    final positionField = TextFormField(
+      controller: positionController,
+      decoration: const InputDecoration(
+        hintText: "Position",
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your position.';
+        }
+      },
+    );
+
+    final homeUnitField = TextFormField(
+      controller: homeUnitController,
+      decoration: const InputDecoration(
+        hintText: "Home Unit",
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your home unit.';
         }
       },
     );
@@ -73,17 +106,19 @@ class _SignupPageState extends State<SignupPage> {
       },
     );
 
-    final SignupButton = Padding(
+    final signupButton = Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
         onPressed: () async {
           if (formKey.currentState!.validate()) {
-            User temp = User(
-                email: emailController.text,
-                firstname: firstnameController.text,
-                lastname: lastnameController.text);
-
-            context.read<UsersProvider>().addUser(temp);
+            Admin temp = Admin(
+              email: emailController.text,
+              name: nameController.text,
+              empNo: int.parse(empNoController.text),
+              position: positionController.text,
+              homeUnit: homeUnitController.text,
+            );
+            context.read<AdminProvider>().addAdmin(temp);
 
             await context
                 .read<AuthProvider>()
@@ -120,11 +155,13 @@ class _SignupPageState extends State<SignupPage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 25),
               ),
-              firstname,
-              lastname,
+              name,
+              empNumber,
+              positionField,
+              homeUnitField,
               email,
               password,
-              SignupButton,
+              signupButton,
               backButton
             ],
           ),

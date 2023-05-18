@@ -73,8 +73,8 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
-    final signUpButton = Padding(
-      key: const Key('signUpButton'),
+    final signUpButtonForUser = Padding(
+      key: const Key('userSignUpButton'),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
         onPressed: () async {
@@ -84,7 +84,24 @@ class _LoginPageState extends State<LoginPage> {
             ),
           );
         },
-        child: const Text('Sign Up', style: TextStyle(color: Colors.white)),
+        child: const Text('Sign Up as User',
+            style: TextStyle(color: Colors.white)),
+      ),
+    );
+
+    final signUpButtonForAdmin = Padding(
+      key: const Key('adminSignUpButton'),
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: ElevatedButton(
+        onPressed: () async {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const SignupPage(),
+            ),
+          );
+        },
+        child: const Text('Sign Up as Admin',
+            style: TextStyle(color: Colors.white)),
       ),
     );
 
@@ -105,7 +122,13 @@ class _LoginPageState extends State<LoginPage> {
               email,
               password,
               loginButton,
-              signUpButton,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  signUpButtonForUser,
+                  signUpButtonForAdmin,
+                ],
+              )
             ],
           ),
         ),
